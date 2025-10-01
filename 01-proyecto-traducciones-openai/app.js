@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 // servir frontend
-app.use("/", express.static("public"));
+app.use("/front", express.static("public"));
 
 app.get("/api", (req, res) => {
   res.json({ message: "¡Funciona!" });
