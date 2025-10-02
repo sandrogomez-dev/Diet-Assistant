@@ -17,8 +17,12 @@ app.get("/api", (req, res) => {
 });
 
 // middleware para procesar json
+app.use(express.json());
 
 //instancia de openai y pasar el api key
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 //ruta /  endpoint / url
 
