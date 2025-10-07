@@ -10,11 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 // servir frontend
-app.use("/front", express.static("public"));
-
-app.get("/api", (req, res) => {
-  res.json({ message: "¡Funciona!" });
-});
+app.use("/", express.static("public"));
 
 // middleware para procesar json
 app.use(express.json());
@@ -25,37 +21,81 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+let userDAta = {};
 //ruta /  endpoint / url
-app.post("/api/traducir", async (req, res) => {
-  const { text, targetLang } = req.body;
+app.post("/api/nutri-chat", async (req, res) => {
+  console.log(userData);
+  //primero se pregunta el peso en el frontend
 
-  const promptSystem1 = `Eres un traductor experto.`;
-  const promptSystem2 =
-    `Solo puedes responder con una traduccion directa del texto que el usuario te envie.` +                                                                     
-    " Cualquier otra respuesta o conversacion, esta prohibida.";
-  const promptUser = `Traduce el siguiente texto al idioma ${targetLang}:\n\n${text}\n\nTraducción:`;                                                          
-  //funcionalidad de traducir con IA
-  // LLamar al LLM o modelo de openai
-  try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: promptSystem1 + "\n" + promptSystem2 },      
-        { role: "user", content: promptUser },
-      ],
-      max_tokens: 500,
-      response_format: { type: "text" },
+  //recibir la respuesta del peso del usuario
+  const userId = req.body.id;
+  const userMessage = req.body.message;
+
+  // Generar objeto del usuario
+  if (!userData[userId]) {
+    userData[userId] = {};
+  }
+
+  if (!userData[userId].peso) {
+    userData[userId].peso = userMessage;
+
+    return res.json({ reply: `Cuanto mides? (cm)` });
+  }
+
+  if (!userData[userId].altura) {
+    userData[userId].altura = userMessage;
+
+    return res.json({
+      reply: "Cual es tu objetivo? (perder peso, ganar musculo, mantener)",
     });
+  }
 
-    const translatedText = completion.choices[0].message.content;
+  if (!userData[userId].objetivo) {
+    userData[userId].objetivo = userMessage;
 
-    return res.status(200).json({ translatedText });
-  } catch (error) {
-    console.log("Error al traducir:", error);
-    return res.status(500).json({ error: "Error al traducir" });
+    return res.json({
+      reply: "Tienes alguna alergia o restriccion alimentaria? (si/no)",
+    });
+  }
+
+  if (!userData[userId].alergias) {
+    userData[userId].alergias = userMessage;
+
+    return res.json({ reply: "Que alimentos no te gustan?" });
+  }
+
+  if (!userData[userId].no_gusta) {
+    userData[userId].no_gusta = userMessage;
+
+    return res.json({ reply: "Cuantas comidas quieres hacer cada dia?" });
+  }
+
+  if (!userData[userId].comidas_diarias) {
+    userData[userId].comidas_diarias = userMessage;
+
+    // Ejecutar peticion a la ia con un prompt
+
+    // recoger la respuesta y darle la dieta al usuario
+
+    // devovler respuesta al usuario
+
+    return res.json({
+      reply: "Gracias por la informacion, generando tu plan de dieta...",
+    });
+  }
+
+  if (
+    userData[userId].peso &&
+    userData[userId].altura &&
+    userData[userId].objetivo &&
+    userData[userId].alergias &&
+    userData[userId].no_gusta &&
+    userData[userId].comidas_diarias
+  ) {
+    userData[userId] = {};
+    console.log(userData);
   }
 });
-
 // Servir el backend
 app.listen(PORT, () => {
   console.log("Servidor escuchando en http://localhost:" + PORT);
