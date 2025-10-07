@@ -1,47 +1,29 @@
-let translateButton = document.querySelector("#translateButton");
+// Seleccionar elementos
+let userInput = document.querySelector("#inputText");
+let resButton = document.querySelector("#resButton");
 
-translateButton.addEventListener("click", async () => {
-  let inputText = document.querySelector("#inputText");
-  //valor a traducir
-  const text = inputText.value.trim();
+async function sendMessage() {
+  const myMessage = userInput.value;
 
-  // lenguaje de destino
-  const targetLang = document.querySelector("#targetLang").value;
+  if (!myMessage) return false;
 
-  if (!text) return false;
-  // meter el mensaje del usuario a la caja de mensajes
-  const userMessage = document.createElement("div");
-  userMessage.className = "chat__message chat__message--user";
-  userMessage.textContent = text;
+  userInputValue = "";
 
-  const messagesContainer = document.querySelector(".chat__messages");
-  messagesContainer.appendChild(userMessage);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  // peticion ajax al backend
-  try {
-    const response = await fetch("/api/traducir", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text, targetLang }),
-    });
+  // anaadir mi mensaje de usuario
 
-    const data = await response.json();
-    //agragere el mensaje de la ia al chat
+  // crear mensaje de cargando esperando al bot
 
-    alert(data.translatedText);
-    const botMessage = document.createElement("div");
-    botMessage.className = "chat__message chat__message--bot";
-    botMessage.textContent = data.translatedText;
-    messagesContainer.appendChild(botMessage);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  } catch (error) {
-    console.log("Error:");
+  // enviar la peticion al backend
+
+  // recoger la respuesta y reemplazar por el texto IA
+
+  // limpiar el input
+  userInput.value = "";
+}
+
+resButton.addEventListener("click", sendMessage);
+userInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    sendMessage();
   }
-  //agragere el mensaje de la ia al chat
-
-  //vaciar el input de tipo texto
-
-  inputText.value = "";
 });
