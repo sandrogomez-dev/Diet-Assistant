@@ -28,7 +28,9 @@ translateButton.addEventListener("click", async () => {
     });
 
     const data = await response.json();
-    //agregar el mensaje de la ia al chat
+    //agragere el mensaje de la ia al chat
+
+    alert(data.translatedText);
     const botMessage = document.createElement("div");
     botMessage.className = "chat__message chat__message--bot";
     botMessage.textContent = data.translatedText;
