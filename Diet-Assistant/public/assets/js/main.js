@@ -50,16 +50,21 @@ async function sendMessage() {
   const lastBotMessage = botMessages[botMessages.length - 1];
 
   if (lastBotMsg) {
-    lastBotMsg.textContent = data.reply;
+    if (data.reply.length > 100) {
+      const md = new markdownIt();
+      const htmlContent = md.render(reply);
+
+      lastBotMsg.innerHTML = htmlContent;
+    } else {
+      lastBotMsg.textContent = data.reply;
+    }
     chatBox.scrollTop = chatBox.scrollHeight;
   } else {
     displayMessage(data.reply, "bot");
   }
-  // Formatear Resultado
-  lastBotMessage.textContent = data.reply;
-  // limpiar el input
-  userInput.value = "";
 }
+
+function formatTable(reply) {}
 
 resButton.addEventListener("click", sendMessage);
 userInput.addEventListener("keydown", function (e) {

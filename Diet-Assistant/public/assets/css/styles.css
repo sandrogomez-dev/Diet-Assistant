@@ -58,7 +58,7 @@ body{
 }
 
 .chat__message{
-    max-width: 75%;
+    max-width: 85%;
     padding: 1.5rem;
     border-radius: 1rem;
     word-wrap: break-word;
@@ -130,3 +130,26 @@ body{
 .chat__button:hover{
     background-color: #00834e;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th{
+    background-color:#00834e;
+    color: white;
+    padding: 1.2rem;
+    text-align: left;
+
+}
+
+tbody td{
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even){
+    background-color: #f9f9f9;
+}
+
