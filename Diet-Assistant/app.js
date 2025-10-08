@@ -43,6 +43,7 @@ const generateDiet = async (userResponses) => {
         Devuelve la dieta en formato tabla markdown con las siguiente columnas:
         Dia, Comida, Ingredientes, Cantidades, Instrucciones.
         y no digas nada mas, solo devuelve la tabla.
+        Si el usuario no te manda alguno de los datos, interpretalo tu mismo (por ejemplo si el usuario no me pasa el peso, pero si la altura, usa un peso mas o menos probable.)
         `,
   };
 
@@ -58,7 +59,6 @@ const generateDiet = async (userResponses) => {
     const response = completion.choices[0].message.content.trim();
     return response;
     // devolver la respuesta generada por la ia
-    return res.json({ reply: completion.choices[0].message.content });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ reply: "Error al generar la dieta" });
